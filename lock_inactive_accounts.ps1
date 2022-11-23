@@ -3,7 +3,7 @@
 
 ## Disable account if not used for X days
 $90Days = (get-date).adddays(-90)
-$users = Get-ADUser -properties * -filter {((lastlogondate -notlike "*" -OR lastlogondate -le $90Days) -AND (enabled -eq $True))}  | where CanonicalName -Like "*NamedAccounts*" | select-object SAMaccountname
+$users = Get-ADUser -properties * -filter {((lastlogondate -notlike "*" -OR lastlogondate -le $90Days) -AND (enabled -eq $True))}  | Where-Object CanonicalName -Like "*NamedAccounts*" | select-object SAMaccountname
 foreach ($user in $users)
 {
     write-host Disabling account $user.SAMaccountname
@@ -13,7 +13,7 @@ foreach ($user in $users)
 
 ## Delete account if disabled for X months.
 $6Months = (get-date).AddMonths(-6)
-$users = Get-ADUser -properties * -filter {((modifyTimeStamp -le $6Months) -AND (enabled -eq $False))}  | where CanonicalName -Like "*NamedAccounts*" | select-object SAMaccountname
+$users = Get-ADUser -properties * -filter {((modifyTimeStamp -le $6Months) -AND (enabled -eq $False))}  | Where-Object CanonicalName -Like "*NamedAccounts*" | select-object SAMaccountname
 foreach ($user in $users)
 {
     write-host Deleting account $user.SAMaccountname
